@@ -16,7 +16,7 @@ exports.getClient = async  () =>{
 
 
     client.on("ready", () => {
-        console.log('\n#############[ BOT ACTIVADO ]################')
+        console.log('\n=============[ BOT ACTIVADO ]=============')
         console.log(`[ + LOGS + ]\n`);
     })
 

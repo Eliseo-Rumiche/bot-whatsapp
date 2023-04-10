@@ -7,6 +7,7 @@
 
 ### Node ###
 # Logs
+
 logs
 *.log
 npm-debug.log*
@@ -194,3 +195,5 @@ $RECYCLE.BIN/
 
 # Custom rules (everything added below won't be overriden by 'Generate .gitignore File' if you use 'Update' option)
 
+.wwebjs_auth/
+*.pdf
