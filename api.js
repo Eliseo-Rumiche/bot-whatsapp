@@ -1,13 +1,12 @@
 const express = require('express');
 const app = express();
-const fs = require('fs');
-const axios = require('axios');
 const { getClient, messageMedia} = require('./bot.js');
+const multer = require('multer');
+const upload = multer({ dest: 'files/' });
 const bodyParser = require('body-parser');
-const generateUUID = require('./utils.js')
+const fs = require('fs')
+
 let bot;
-
-
 
 app.set('port', process.env.PORT || 3000);
 app.set('json spaces', 2)
@@ -15,6 +14,7 @@ app.set('json spaces', 2)
 
 app.use(express.urlencoded({ extended: false }));
 app.use(bodyParser.json());
+
 
 
 app.post('/message', async (req, res) => {
@@ -40,18 +40,18 @@ app.post('/message', async (req, res) => {
 
 
 
-app.post('/message/media', async (req, res) => {
+app.post('/message/media', upload.single('file'), async (req, res) => {
     let data = null
-    const phone = '51' + req.body.phone + '@c.us'
-    const urlMedia = await req.body.urlMedia
-    const response = await axios.get(urlMedia, { responseType: 'arraybuffer' });
-    const buffer = Buffer.from(response.data, 'binary');
-    const nameFile = 'file' + generateUUID() +'.pdf'
-    fs.writeFileSync(nameFile, buffer);
-
+    
     try{
-        const media = messageMedia.fromFilePath('./'+nameFile);
+        const phone = '51' + req.body.phone + '@c.us'
+        const file = req.file
+        const media = messageMedia.fromFilePath(file.path);
+        media.filename = file.originalname
+        media.mimetype = file.mimetype
+
         bot.sendMessage(phone, media);
+
         data = { 
             success : true
         }
@@ -62,8 +62,8 @@ app.post('/message/media', async (req, res) => {
             error : err
         }
     }
-    fs.unlinkSync(nameFile);
-    console.log(`[+${phone}] => ${urlMedia}`)
+    fs.unlinkSync(file.path);
+    console.log(`[+${phone}] => ${file.originalname}`)
     res.json(data)
 
 })
