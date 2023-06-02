@@ -1,0 +1,12 @@
+version: "1"
+services:
+  app:
+    ports:
+      - "3000:3000"
+    build:
+      context: .
+    environment:
+      PORT: 3000
+      NODE_ENV: production
+      PUPPETEER_SKIP_CHROMIUM_DOWNLOAD: true
+      CHROMIUM_PATH: /usr/bin/chromium-browser

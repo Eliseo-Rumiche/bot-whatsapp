@@ -198,3 +198,6 @@ $RECYCLE.BIN/
 .wwebjs_auth/
 *.pdf
 files/
+
+#session files 
+.wwebjs_auth
