@@ -6,13 +6,13 @@ RUN adduser --disabled-password --gecos "" bot
 USER bot
 
 WORKDIR /home/bot/app
+COPY . .
 
-COPY package.json .
-
+USER root
+RUN chown -R bot:bot /home/bot/app
+USER bot
 
 RUN npm install
-
-COPY . .
 
 
 CMD ["npm", "start"]
