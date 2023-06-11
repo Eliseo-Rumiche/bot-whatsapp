@@ -20,10 +20,12 @@ app.use(bodyParser.json());
 app.post('/message', async (req, res) => {
     let data = null
     try{
-        const phone = '51' + req.body.phone + '@c.us'
+        const phone = await req.body.phone
+        const chaId = `51${phone}@c.us`
         const message = await req.body.message
-        bot.sendMessage(phone, message);
-        console.log(`[+${phone}] => ${message}`)
+
+        bot.sendMessage(chaId, message);
+        console.log(`[+ ${phone} ] => messagetxt `)
         data = { 
             success : true
         }
@@ -45,13 +47,14 @@ app.post('/message/media', upload.single('file'), async (req, res) => {
     
     const file = req.file
     try{
-        const phone = '51' + req.body.phone + '@c.us'
+        const phone = await req.body.phone
+        const chaId = `51${phone}@c.us`
         const media = messageMedia.fromFilePath(file.path);
         media.filename = file.originalname
         media.mimetype = file.mimetype
 
-        bot.sendMessage(phone, media);
-        console.log(`[+${phone}] => ${file.originalname}`)
+        bot.sendMessage(chaId, media);
+        console.log(`[+ ${phone} ] => ${file.originalname}`)
 
         data = { 
             success : true
@@ -70,9 +73,9 @@ app.post('/message/media', upload.single('file'), async (req, res) => {
 })
 
 
-app.listen(app.get('port'), async() => {
+app.listen(app.get('port'), () => {
     
     console.log('INICIANDO BOT ESPERE .....')
-    bot = await getClient()
+    bot = getClient()
     
 });
